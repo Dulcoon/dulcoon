@@ -4,30 +4,39 @@ import threading
 import os
 import pyfiglet
 
-def soalPertanyaan(level):
-    if level == 1:
-        angka1 = random.randint(-100, 100)
+def soalPertanyaan(skor, level):
+    if skor < 5:
+        level = 1
+        print("Pertanyaan Level 1")
+        angka1 = random.randint(1, 5)
         angka2 = random.randint(1, 10)
         operasi = random.choice(['+', '-'])
         pertanyaan = f"Berapa hasil dari {angka1} {operasi} {angka2}? "
         jawaban = eval(str(angka1) + operasi + str(angka2))
-    elif level == 2:
+    elif skor < 11:
+        level = 2
+        print("Pertanyaan Level 2")
         angka1 = random.randint(1, 10)
         angka2 = random.randint(1, 10)
         pertanyaan = f"Berapa hasil dari {angka1} * {angka2}? "
         jawaban = angka1 * angka2
-    elif level == 3:
+    elif skor < 16:
+        level = 3
+        print("Pertanyaan Level 3")
         angka1 = random.randint(1, 10)
         angka2 = random.randint(1, 5)
         pertanyaan = f"Berapa hasil dari {angka1} / {angka2}? (dibulatkan menjadi 2 tempat desimal) "
         jawaban = round(angka1 / angka2, 2)
     else:
+        level = 4
+        print("Pertanyaan Level 4")
         angka1 = random.randint(1, 10)
         angka2 = random.randint(1, 10)
         pertanyaan = f"Berapa hasil dari {angka1} % {angka2}? "
         jawaban = angka1 % angka2
 
-    return pertanyaan, jawaban
+    return pertanyaan, jawaban, level
+
 
 def play_again():
     choice = input("Do you want to play again? (yes/no) ").lower()
@@ -40,7 +49,7 @@ def print_welcome_screen():
     print("=" * 63)
     print(" "*23, "Welcome to")
     print("=" * 63)
-    ascii_art = pyfiglet.figlet_format("MATH GAMES!")
+    ascii_art = pyfiglet.figlet_format(" MATH GAMES!")
     print(ascii_art)
     print("=" * 63)
     print("Prepare yourself to dive into the world of math!")
@@ -86,9 +95,8 @@ def main():
     input("Tekan [ENTER] Saat Anda Sudah Siap Bermain....")
     os.system("cls")
     while nyawa > 0:
-        # if skor == 5 
         print(f"\nLevel {level} | Score: {skor} | Lives: {nyawa}")
-        pertanyaan, jawaban = soalPertanyaan(level)
+        pertanyaan, jawaban, level = soalPertanyaan(skor, level)
         print(pertanyaan)
 
         t = threading.Thread(target=countdown)

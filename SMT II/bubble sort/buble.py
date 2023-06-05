@@ -56,25 +56,11 @@ def descend_insertion_sort(my_list):
     for i in range(1, len(my_list)):
         temp = my_list[i]
         j = i - 1
-        while j >= 0 and temp > my_list[j]:
+        while (temp > my_list[j] and j > -1):
             my_list[j+1] = my_list[j]
             j -= 1
         my_list[j+1] = temp
     return my_list
-
-
-
-            # while True:
-            #     try:
-            #         idx = int(input("Masukkan Index : "))
-            #     except ValueError:
-            #         print("Index Harus Berupa Integer (Numerik) ")
-            #     else:
-            #         my_linked_list.load()
-            #         print(f"Data Di Index Ke {idx} Adalah {my_linked_list.get(idx)}")
-            #         input("PRESS [ENTER] TO CONTINUE ")
-            #         os.system("cls")
-            #         break
 
 def menuu():
     while True:
