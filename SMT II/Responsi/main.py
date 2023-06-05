@@ -6,14 +6,14 @@ import pyfiglet
 
 def soalPertanyaan(level):
     if level == 1:
-        angka1 = random.randint(1, 10)
+        angka1 = random.randint(-100, 100)
         angka2 = random.randint(1, 10)
         operasi = random.choice(['+', '-'])
         pertanyaan = f"Berapa hasil dari {angka1} {operasi} {angka2}? "
         jawaban = eval(str(angka1) + operasi + str(angka2))
     elif level == 2:
-        angka1 = random.randint(1, 5)
-        angka2 = random.randint(1, 5)
+        angka1 = random.randint(1, 10)
+        angka2 = random.randint(1, 10)
         pertanyaan = f"Berapa hasil dari {angka1} * {angka2}? "
         jawaban = angka1 * angka2
     elif level == 3:
@@ -33,12 +33,7 @@ def play_again():
     choice = input("Do you want to play again? (yes/no) ").lower()
     return choice == "yes"
 
-def game_over():
-    print("Game over!")
-
 import sys
-
-
 
 
 def print_welcome_screen():
@@ -55,15 +50,18 @@ def rule():
     # print("Welcome to the Math Game!")
     print("- Anda akan diberi pertanyaan matematika.")
     print("- Untuk setiap jawaban benar akan diberi 1 point.")
-    print("- anda memiliki 5 nyawa. Setiap jawaban yang salah nyawa akan berkurang satu.")
-    print("- Anda hanya diberi waktu 5 detik sebelum waktu habis")
+    print("- Anda memiliki 5 nyawa. Setiap jawaban yang salah nyawa akan berkurang satu.")
+    print("- Anda hanya diberi waktu 10 detik sebelum waktu habis")
     print("  Dan jawaban anda dianggap salah. ")
+
+def countdown():
+    for i in range(10, 0, -1):
+        pass
 
 def main():
     level = 1
     skor = 0
     nyawa = 5
-
 
     print_welcome_screen()
     input("Press [ENTER] To Check the Rule...")
@@ -88,11 +86,27 @@ def main():
     input("Tekan [ENTER] Saat Anda Sudah Siap Bermain....")
     os.system("cls")
     while nyawa > 0:
+        # if skor == 5 
         print(f"\nLevel {level} | Score: {skor} | Lives: {nyawa}")
         pertanyaan, jawaban = soalPertanyaan(level)
         print(pertanyaan)
 
+        t = threading.Thread(target=countdown)
+        t.start()
+
+        start_time = time.time()
         jawaban_user = input("Jawaban Anda: ")
+        elapsed_time = time.time() - start_time
+
+        t.join()
+
+        if elapsed_time > 10:
+            nyawa -= 1
+            print("Waktu habis! Jawaban dianggap salah.")
+            print(f"Anda memiliki {nyawa} Nyawa Tersisa.")
+            input("Press [ENTER] To Continue...")
+            os.system("cls")
+            continue
 
         try:
             jawaban_user = float(jawaban_user)
@@ -100,31 +114,25 @@ def main():
             print("Invalid input. Please enter a number.")
             continue
 
-        if t.is_alive():
-            # Hitungan mundur masih berjalan, pengguna memberikan jawaban
-            if jawaban_user == jawaban:
-                skor += 1
-                print("Benar!")
-                input("Press [ENTER] To Continue...")
-                os.system("cls")
-            else:
-                nyawa -= 1
-                print("Jawaban Salah!")
-                print(f"The Benar jawaban is {jawaban}.")
-                print(f"You have {nyawa} nyawa left.")
-                input("Press [ENTER] To Continue...")
-                os.system("cls")
+        if jawaban_user == jawaban:
+            skor += 1
+            print("Benar!")
+            input("Press [ENTER] To Continue...")
+            os.system("cls")
         else:
-            # Waktu habis, dianggap jawaban salah
             nyawa -= 1
-            print("Time's up! Wrong jawaban!")
-            print(f"The Benar jawaban is {jawaban}.")
-            print(f"You have {nyawa} nyawa left.")
+            print("Jawaban Salah!")
+            print(f"Jawaban Yang benar adalah {jawaban}.")
+            print(f"Anda memiliki {nyawa} Nyawa Tersisa.")
             input("Press [ENTER] To Continue...")
             os.system("cls")
 
-        if nyawa == 0:
-            game_over()
+        if nyawa == 0 or nyawa < 0:
+            print("Game Over")
+            print("="*20)
+            print(f"Nama       : {name}")
+            print(f"Skor Akhir : {skor}")
+            print("="*20)
             if play_again():
                 level = 1
                 skor = 0
