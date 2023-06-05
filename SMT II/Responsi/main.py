@@ -38,38 +38,8 @@ def game_over():
 
 import sys
 
-# def countdown_timer(seconds):
-#     print("waktu")
-#     for i in range(seconds, 0, -1):
-#         sys.stdout.write(f"{i}\r")
-#         # sys.stdout.flush()
-#         time.sleep(1)
 
 
-# def countdown(t):
-#     real = t
-#     while t > 0:
-#         CURSOR_UP = '\033[F'
-#         ERASE_LINE = '\033[K'
-#         if t == real:
-#             print(ERASE_LINE + 'Duration: {}s'.format(t), end='\r', flush=True)
-#         else:
-#             print(CURSOR_UP + ERASE_LINE + 'Duration: {}s'.format(t), end='\r', flush=True)
-#         time.sleep(1)
-#         t -= 1
-
-
-def countdown(t):
-    real = t
-    while t > 0:
-        CURSOR_UP = '\033[F'
-        ERASE_LINE = '\033[K'
-        if t == real:
-            print(ERASE_LINE + 'Duration : {}s'.format(t))
-        else:
-            print(CURSOR_UP + ERASE_LINE + 'Duration : {}s'.format(t))
-        time.sleep(1)
-        t -= 1
 
 def print_welcome_screen():
     print("=" * 63)
@@ -122,14 +92,7 @@ def main():
         pertanyaan, jawaban = soalPertanyaan(level)
         print(pertanyaan)
 
-        # Memulai hitungan mundur dalam thread terpisah
-        t = threading.Thread(target=countdown, args=(5,))
-        t.start()
-
         jawaban_user = input("Jawaban Anda: ")
-
-        # Menghentikan hitungan mundur jika pengguna memberikan jawaban sebelum waktu habis
-        t.join(timeout=0)
 
         try:
             jawaban_user = float(jawaban_user)
@@ -142,14 +105,14 @@ def main():
             if jawaban_user == jawaban:
                 skor += 1
                 print("Benar!")
-                # input("Press [ENTER] To Continue...")
+                input("Press [ENTER] To Continue...")
                 os.system("cls")
             else:
                 nyawa -= 1
                 print("Jawaban Salah!")
                 print(f"The Benar jawaban is {jawaban}.")
                 print(f"You have {nyawa} nyawa left.")
-                # input("Press [ENTER] To Continue...")
+                input("Press [ENTER] To Continue...")
                 os.system("cls")
         else:
             # Waktu habis, dianggap jawaban salah
