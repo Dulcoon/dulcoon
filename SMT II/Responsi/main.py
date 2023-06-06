@@ -3,9 +3,14 @@ import time
 import threading
 import os
 import pyfiglet
+ 
 
 def soalPertanyaan(skor, level):
-    if skor < 5:
+    print("=" * 63)
+    ascii_art = pyfiglet.figlet_format(" MATH GAMES!")
+    print(ascii_art)
+    print("=" * 63)
+    if skor <= 5:
         level = 1
         print("Pertanyaan Level 1")
         angka1 = random.randint(1, 5)
@@ -13,21 +18,21 @@ def soalPertanyaan(skor, level):
         operasi = random.choice(['+', '-'])
         pertanyaan = f"Berapa hasil dari {angka1} {operasi} {angka2}? "
         jawaban = eval(str(angka1) + operasi + str(angka2))
-    elif skor < 11:
+    elif skor >= 6 and skor <= 10:
         level = 2
         print("Pertanyaan Level 2")
         angka1 = random.randint(1, 10)
         angka2 = random.randint(1, 10)
         pertanyaan = f"Berapa hasil dari {angka1} * {angka2}? "
         jawaban = angka1 * angka2
-    elif skor < 16:
+    elif skor >= 11 and skor <= 15:
         level = 3
         print("Pertanyaan Level 3")
         angka1 = random.randint(1, 10)
         angka2 = random.randint(1, 5)
         pertanyaan = f"Berapa hasil dari {angka1} / {angka2}? (dibulatkan menjadi 2 tempat desimal) "
         jawaban = round(angka1 / angka2, 2)
-    else:
+    elif skor >= 16 and skor <= 20:
         level = 4
         print("Pertanyaan Level 4")
         angka1 = random.randint(1, 10)
@@ -42,11 +47,10 @@ def play_again():
     choice = input("Do you want to play again? (yes/no) ").lower()
     return choice == "yes"
 
-import sys
-
 
 def print_welcome_screen():
-    print("=" * 63)
+    green_color = "\033[92m"
+    print(green_color + "=" * 63)
     print(" "*23, "Welcome to")
     print("=" * 63)
     ascii_art = pyfiglet.figlet_format(" MATH GAMES!")
@@ -56,7 +60,6 @@ def print_welcome_screen():
     print("=" * 63)
 
 def rule():
-    # print("Welcome to the Math Game!")
     print("- Anda akan diberi pertanyaan matematika.")
     print("- Untuk setiap jawaban benar akan diberi 1 point.")
     print("- Anda memiliki 5 nyawa. Setiap jawaban yang salah nyawa akan berkurang satu.")
@@ -67,11 +70,10 @@ def countdown():
     for i in range(10, 0, -1):
         pass
 
-def main():
-    level = 1
+def play():
+    level = 0
     skor = 0
     nyawa = 5
-
     print_welcome_screen()
     input("Press [ENTER] To Check the Rule...")
     rule()
@@ -95,8 +97,8 @@ def main():
     input("Tekan [ENTER] Saat Anda Sudah Siap Bermain....")
     os.system("cls")
     while nyawa > 0:
-        print(f"\nLevel {level} | Score: {skor} | Lives: {nyawa}")
         pertanyaan, jawaban, level = soalPertanyaan(skor, level)
+        print(f"\nLevel {level} | Score: {skor} | Lives: {nyawa}")
         print(pertanyaan)
 
         t = threading.Thread(target=countdown)
@@ -115,7 +117,6 @@ def main():
             input("Press [ENTER] To Continue...")
             os.system("cls")
             continue
-
         try:
             jawaban_user = float(jawaban_user)
         except ValueError:
@@ -136,11 +137,12 @@ def main():
             os.system("cls")
 
         if nyawa == 0 or nyawa < 0:
-            print("Game Over")
-            print("="*20)
+            ascii_art = pyfiglet.figlet_format(" GAME OVER!")
+            print(ascii_art)
+            print("="*25)
             print(f"Nama       : {name}")
             print(f"Skor Akhir : {skor}")
-            print("="*20)
+            print("="*25)
             if play_again():
                 level = 1
                 skor = 0
@@ -150,4 +152,4 @@ def main():
                 print("Thank you for playing. Goodbye!")
 
 if __name__ == "__main__":
-    main()
+    play()

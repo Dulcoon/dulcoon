@@ -1,3 +1,6 @@
+# Michael Valensio One Febian
+# 5220411200
+
 import os
 import pyinputplus as pyip
 from prettytable import PrettyTable
@@ -5,7 +8,7 @@ table = PrettyTable()
 
 dataTransaksi = []
 
-class Node:
+class barang:
     def __init__(self, SKU, namaBarang, hargaSatuan, jumlahStok):
         self.SKU = SKU
         self.namaBarang = namaBarang
@@ -114,15 +117,13 @@ class BinarySearchTree:
                 if ask.lower() == "n":
                     loop_selesai = True
 
-   
-        
     def insert(self):
         SKU = pyip.inputNum("Masukkan No.SKU (Int Only) : ", min=1000, max=9999)
         if self.root is None:
             namaBarang = input("Masukkan Nama Barang : ")
             hargaSatuan = pyip.inputInt("Masukkan Harga Satuan : ")
             jumlahStok = pyip.inputInt("Masukkan Jumlah Stok Barang : ")
-            self.root = Node(SKU, namaBarang, hargaSatuan, jumlahStok)
+            self.root = barang(SKU, namaBarang, hargaSatuan, jumlahStok)
             return True
         temp = self.root
         while (True):
@@ -134,7 +135,7 @@ class BinarySearchTree:
                     namaBarang = input("Masukkan Nama Barang : ")
                     hargaSatuan = pyip.inputInt("Masukkan Harga Satuan : ")
                     jumlahStok = pyip.inputInt("Masukkan Jumlah Stok Barang : ")
-                    temp.left = Node(SKU, namaBarang, hargaSatuan, jumlahStok)
+                    temp.left = barang(SKU, namaBarang, hargaSatuan, jumlahStok)
                     return True
                 temp = temp.left
             else:
@@ -142,22 +143,21 @@ class BinarySearchTree:
                     namaBarang = input("Masukkan Nama Barang : ")
                     hargaSatuan = pyip.inputInt("Masukkan Harga Satuan : ")
                     jumlahStok = pyip.inputInt("Masukkan Jumlah Stok Barang : ")
-                    temp.right = Node(SKU, namaBarang, hargaSatuan, jumlahStok)
+                    temp.right = barang(SKU, namaBarang, hargaSatuan, jumlahStok)
                     return True
                 temp = temp.right
 
     def printDataBarang(self):
         table = PrettyTable()
-        # self.printTabel(self.root)
         table.field_names = ["No.SKU", "Nama Barang", "Harga Satuan (Rp)", "Sisa Stok"]
         self.printTabel(self.root, table)
         print(table)
 
-    def printTabel(self, node, table):
-        if node is not None:
-            self.printTabel(node.left, table)
-            table.add_row([node.SKU, node.namaBarang, node.hargaSatuan, node.jumlahStok])
-            self.printTabel(node.right,table)
+    def printTabel(self, barang, table):
+        if barang is not None:
+            self.printTabel(barang.left, table)
+            table.add_row([barang.SKU, barang.namaBarang, barang.hargaSatuan, barang.jumlahStok])
+            self.printTabel(barang.right,table)
 
     def printDataTransaksi(self):
         table = PrettyTable()
@@ -170,7 +170,7 @@ class BinarySearchTree:
         for i in range(1, len(my_list)):
             temp = my_list[i]
             j = i - 1
-            while j >= 0 and key(temp) > key(my_list[j]):  # Ubah tanda < menjadi >
+            while j >= 0 and key(temp) > key(my_list[j]):
                 my_list[j + 1] = my_list[j]
                 j -= 1
             my_list[j + 1] = temp
@@ -186,29 +186,29 @@ class BinarySearchTree:
 
 
     def insertDummy(self, SKU, namaBarang, hargaSatuan, jumlahStok):
-            new_node = Node(SKU, namaBarang, hargaSatuan, jumlahStok)
+            new_barang = barang(SKU, namaBarang, hargaSatuan, jumlahStok)
             if self.root is None:
-                self.root = new_node
+                self.root = new_barang
                 return True
             temp = self.root
             while (True):
-                if new_node.SKU == temp.SKU:
+                if new_barang.SKU == temp.SKU:
                     return False
-                if new_node.SKU < temp.SKU:
+                if new_barang.SKU < temp.SKU:
                     if temp.left is None:
-                        temp.left = new_node
+                        temp.left = new_barang
                         return True
                     temp = temp.left
                 else:
                     if temp.right is None:
-                        temp.right = new_node
+                        temp.right = new_barang
                         return True
                     temp = temp.right
 myTree = BinarySearchTree()
-# myTree.insertDummy(3333, "udud", 20000, 33)
-# myTree.insertDummy(4444, "rokok", 20000, 33)
-# myTree.insertDummy(5555, "baju", 20000, 33)
-# myTree.insertDummy(6666, "celana", 20000, 33)
+myTree.insertDummy(3333, "udud", 20000, 33)
+myTree.insertDummy(4444, "rokok", 20000, 33)
+myTree.insertDummy(5555, "baju", 20000, 33)
+myTree.insertDummy(6666, "celana", 20000, 33)
 def menu():
     os.system("cls")
     while True:
@@ -266,7 +266,7 @@ def menu():
                     print("menu salah")
                     continue
                 input("Press [ENTER] To Continue...")
-        elif pilih == "3":
+        else:
             print("Terimakasih Telah Menggunakan Program Saya!")
             exit()
 if __name__=="__main__":
