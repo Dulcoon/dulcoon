@@ -84,9 +84,9 @@ class BinarySearchTree:
                     barang_ditemukan = True
                     inputUlang = True
                     print("========== Detil Barang ==========")
-                    print("Nama Barang : ", temp.namaBarang)
-                    print("Harga Satuan Barang : Rp",temp.hargaSatuan) 
-                    print("Jumlah Stok : ", temp.jumlahStok) 
+                    print("Nama Barang          : ", temp.namaBarang)
+                    print("Harga Satuan Barang  : Rp",temp.hargaSatuan) 
+                    print("Jumlah Stok          : ", temp.jumlahStok) 
                     print("==================================")
                     while inputUlang:
                         jumlah = pyip.inputNum("Masukkan Jumlah Beli: ")
@@ -116,34 +116,36 @@ class BinarySearchTree:
                 ask = input("Apakah Anda Ingin Melanjutkan Transaksi? (y/n) : ")
                 if ask.lower() == "n":
                     loop_selesai = True
-
+    def inputInsert(self):
+        namaBarang = input("Masukkan Nama Barang : ")
+        hargaSatuan = pyip.inputInt("Masukkan Harga Satuan : ")
+        jumlahStok = pyip.inputInt("Masukkan Jumlah Stok Barang : ")
+        return namaBarang, hargaSatuan, jumlahStok
+    
     def insert(self):
         SKU = pyip.inputNum("Masukkan No.SKU (Int Only) : ", min=1000, max=9999)
         if self.root is None:
-            namaBarang = input("Masukkan Nama Barang : ")
-            hargaSatuan = pyip.inputInt("Masukkan Harga Satuan : ")
-            jumlahStok = pyip.inputInt("Masukkan Jumlah Stok Barang : ")
+            namaBarang, hargaSatuan, jumlahStok = self.inputInsert()
             self.root = barang(SKU, namaBarang, hargaSatuan, jumlahStok)
+            print("Input Data Stok Barang Berhasil")
             return True
         temp = self.root
         while (True):
             if SKU == temp.SKU:
-                print("No SKU sudah Terdaftar")
+                print("No SKU sudah Terdaftar! Permintaan Input Data Ditolak")
                 return False
             if SKU < temp.SKU:
                 if temp.left is None:
-                    namaBarang = input("Masukkan Nama Barang : ")
-                    hargaSatuan = pyip.inputInt("Masukkan Harga Satuan : ")
-                    jumlahStok = pyip.inputInt("Masukkan Jumlah Stok Barang : ")
+                    namaBarang, hargaSatuan, jumlahStok = self.inputInsert()
                     temp.left = barang(SKU, namaBarang, hargaSatuan, jumlahStok)
+                    print("Input Data Stok Barang Berhasil")
                     return True
                 temp = temp.left
             else:
                 if temp.right is None:
-                    namaBarang = input("Masukkan Nama Barang : ")
-                    hargaSatuan = pyip.inputInt("Masukkan Harga Satuan : ")
-                    jumlahStok = pyip.inputInt("Masukkan Jumlah Stok Barang : ")
+                    namaBarang, hargaSatuan, jumlahStok = self.inputInsert()
                     temp.right = barang(SKU, namaBarang, hargaSatuan, jumlahStok)
+                    print("Input Data Stok Barang Berhasil")
                     return True
                 temp = temp.right
 

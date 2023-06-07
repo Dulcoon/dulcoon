@@ -1,3 +1,9 @@
+# Michael Valensio One Febian   (5220411200)
+# Hezran Arkee Malaiga          (5220411215)
+# Muhammad Rossi Pratama        (5220411211)
+# Nadhif Atta                   (522041119x)
+
+
 import random
 import time
 import threading
