@@ -1,4 +1,96 @@
-class Node:
+# bsf menggunakan queue sebagai pegganti array
+
+
+class NodeQueue:
+    def __init__(self, value):
+        self.value = value
+        self.next = None
+
+class Queue:
+    def __init__(self):
+        self.first = None
+        self.last = None
+        self.length = 0
+
+    def print_Queue(self):
+        if self.length == 0:
+            return None
+        temp = self.first
+        while temp is not None:
+            print(temp.value)
+            temp = temp.next
+
+    def enqueue(self,value):
+        new_node = NodeQueue(value)
+        if self.first is None:
+            self.first = new_node
+            self.last = new_node
+        else:
+            self.last.next = new_node
+            self.last = new_node
+        self.length += 1
+
+    def dequeue(self):
+        if self.length==0:
+            return None
+        temp = self.first
+        if self.length == 1:
+            self.first = None
+            self.last = None
+        else:
+            self.first = self.first.next
+            temp.next = None
+        self.length -= 1
+        return temp.value
+
+    def length_check(self):
+        return self.length
+    
+    def peek_first(self):
+        return self.first.value
+    
+    def peek_last(self):
+        return self.last.value
+
+class NodeQueueResult:
+    def __init__(self, value):
+        self.value = value
+        self.next = None
+
+class QueueResult:
+    def __init__(self):
+        self.first = None
+        self.last = None
+        self.length = 0
+
+    def print_Queue(self):
+        if self.length == 0:
+            return None
+        temp = self.first
+        while temp is not None:
+            print(temp.value)
+            temp = temp.next
+
+    def enqueue(self,value):
+        new_node = NodeQueue(value)
+        if self.first is None:
+            self.first = new_node
+            self.last = new_node
+        else:
+            self.last.next = new_node
+            self.last = new_node
+        self.length += 1
+
+    def length_check(self):
+        return self.length
+    
+    def peek_first(self):
+        return self.first.value
+    
+    def peek_last(self):
+        return self.last.value
+    
+class NodeBST:
     def __init__(self, value):
         self.value = value
         self.left = None
@@ -9,7 +101,7 @@ class BinarySearchTree:
         self.root = None
 
     def insert(self, value):
-        new_node = Node(value)
+        new_node = NodeBST(value)
         if self.root is None:
             self.root = new_node
             return True
@@ -39,82 +131,48 @@ class BinarySearchTree:
                 return True
         return False
     
-    def MinValueNode(self, currentNode):
-        while currentNode.left is not None:
-            currentNode = currentNode.left
-        return currentNode
-    
-    def MaxValueNode(self, currentNode):
-        while currentNode.right is not None:
-            currentNode = currentNode.right
-        return currentNode
+    def BSF(self):
+        current_node = self.root
+        queue = []
+        results = []
+        queue.append(current_node)
 
-    
-    def totalSelisihKuadrat(self, node):
-        if node is None:
-            return 0
-        return ((node.value - self.get_average(self))**2) + ((self.totalSelisihKuadrat(node.left) - self.get_average(self))**2)  + ((self.totalSelisihKuadrat(node.right) - self.get_average(self))**2)
-   
-    def get_sum(self, node):
-        if node is None:
-            return 0
-        return node.value + self.get_sum(node.left) + self.get_sum(node.right)
+        while(len(queue) > 0):
+            current_node = queue.pop(0)
+            results.append(current_node.value)
+            if current_node.left is not None:
+                queue.append(current_node.left)
+            if current_node.right is not None:
+                queue.append(current_node.right)
+        return results
 
-    def count_nodes(self, node):
-        if node is None:
-            return 0
-        return 1 + self.count_nodes(node.left) + self.count_nodes(node.right)
+    def original_BSF(self):
+        dataQueue = Queue()
+        queueResult = QueueResult()
+        dataQueue.enqueue(self.root)
+        while(dataQueue.length_check() > 0):
+            current_node = dataQueue.peek_first()
+            queueResult.enqueue(current_node.value)
+            dataQueue.dequeue()
+            if current_node.left is not None:
+                dataQueue.enqueue(current_node.left)
+            if current_node.right is not None:
+                dataQueue.enqueue(current_node.right)
+        queueResult.print_Queue()
 
-    def AverageValue(self):
-        sum_values = self.get_sum(self.root)
-        num_nodes = self.count_nodes(self.root)
-        if num_nodes == 0:
-            return 0
-        return sum_values / num_nodes
-    
-    def standarDevasi(self, value):
-        temp = self.root
-        rootVal = (self.root.value - self.get_average(self))**2
-        while (temp is not None):
-            if value < temp.value:
-                temp = temp.left
-                selisihKiri = (temp.value - self.get_average(self))**2
-            elif value > temp.value:
-                temp = temp.right
-                selisihKanan = temp.value - self.get_average(self)
-        return rootVal + selisihKiri + selisihKanan
-        
-    
-
-        
 
 myTree = BinarySearchTree()
 myTree.insert(47)
 myTree.insert(21)
 myTree.insert(76)
+myTree.insert(56)
+myTree.insert(78)
+myTree.original_BSF()
+print(myTree.BSF())
 
 
 
 
-# print("Minimum Value in My Tree")
-# print(myTree.MinValueNode(myTree.root).value)
-
-# print("Maximum Value in My Tree")
-# print(myTree.MaxValueNode(myTree.root).value)
-
-# print("AVG")
-# print(myTree.get_average())
-
-
-# print("BST Contains 27 : ")
-# print(myTree.contains(27))
-
-# print("BST Contains 17 : ")
-# print(myTree.contains(17))
-
-# print("Root", myTree.root.value)
-# print("Root -> Left : ", myTree.root.left.value)
-# print("Root -> Right : ", myTree.root.right.value)
 
 
             

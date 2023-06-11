@@ -2,11 +2,35 @@
 # 5220411200
 
 import os
-import pyinputplus as pyip
 from prettytable import PrettyTable
 table = PrettyTable()
 
+
+
 dataTransaksi = []
+
+def inputSku(prompt):
+    while True:
+        try:
+            ipt = int(input(prompt))
+        except ValueError:
+            print("Input harus berupa int!")
+            ipt = None
+            continue
+        if ipt >= 9999 or ipt <= 1000:
+            print("No SKU harus terdiri dari 4 digit angka!")
+            continue
+        return ipt
+    
+def inputInt(prompt):
+    while True:
+        try:
+            ipt = int(input(prompt))
+        except ValueError:
+            print("Input harus berupa int!")
+            ipt = None
+            continue
+        return ipt
 
 class barang:
     def __init__(self, SKU, namaBarang, hargaSatuan, jumlahStok):
@@ -22,7 +46,7 @@ class BinarySearchTree:
         self.root = None
 
     def restok(self):
-        SKU = pyip.inputNum("Masukkan No.SKU : ", min=1000, max=9999)
+        SKU = inputSku("Masukkan No.SKU : ")
         temp = self.root
         while (temp is not None):
             if SKU < temp.SKU:
@@ -30,7 +54,7 @@ class BinarySearchTree:
             elif SKU > temp.SKU:
                 temp = temp.right
             else:
-                stokBaru = pyip.inputNum("Masukkan Stok Baru : ")
+                stokBaru = inputInt("Masukkan Stok Baru : ")
                 temp.jumlahStok += stokBaru
                 print("Stok Berhasil Ditambahkan!")
                 break
@@ -42,8 +66,20 @@ class BinarySearchTree:
             else:
                 return False
             
+
+    def contains(self,value):
+        temp = self.root
+        while temp is not None:
+            if value < temp.SKU:
+                temp = temp.left
+            elif value > temp.SKU:
+                temp = temp.right
+            else:
+                return True
+        return False
+            
     def hapusStok(self):
-        SKU = pyip.inputNum("Masukkan No.SKU : ", min=1000, max=9999)
+        SKU = inputSku("Masukkan No.SKU : ")
         temp = self.root
         while (temp is not None):
             if SKU < temp.SKU:
@@ -51,7 +87,7 @@ class BinarySearchTree:
             elif SKU > temp.SKU:
                 temp = temp.right
             else:
-                stokBaru = pyip.inputNum("Masukkan Jumlah Stok Yang Akan Dikurangi : ")
+                stokBaru = inputInt("Masukkan Jumlah Stok Yang Akan Dikurangi : ")
                 if stokBaru > temp.jumlahStok:
                     print("Jumlah Stok Yang Diinputkan Tidak Valid")
                     break
@@ -67,63 +103,60 @@ class BinarySearchTree:
             else:
                 return False
 
-    def kelolaTransaksi(self):
-        nama = input("Masukkan Nama Konsumen : ")
-        loop_selesai = False
 
-        while not loop_selesai:
-            temp = self.root 
-            SKU = pyip.inputNum("Masukkan No.SKU : ", min=1000, max=9999)
-            barang_ditemukan = False
-            while temp is not None and not loop_selesai:
-                if SKU < temp.SKU:
-                    temp = temp.left
-                elif SKU > temp.SKU:
-                    temp = temp.right
-                else:
-                    barang_ditemukan = True
-                    inputUlang = True
-                    print("========== Detil Barang ==========")
-                    print("Nama Barang          : ", temp.namaBarang)
-                    print("Harga Satuan Barang  : Rp",temp.hargaSatuan) 
-                    print("Jumlah Stok          : ", temp.jumlahStok) 
-                    print("==================================")
-                    while inputUlang:
-                        jumlah = pyip.inputNum("Masukkan Jumlah Beli: ")
-                        if temp.jumlahStok >= jumlah:
+    def kelolaTransaksi(self):
+        nama = input("Masukkan Nama :")
+        ulang = True
+        while ulang == True:
+            sku = inputSku("Masukkan No SKU : ")
+            temp = self.root
+            if self.contains(sku):
+                print("========== Detil Barang ==========")
+                print("Nama Barang              : ", temp.namaBarang)
+                print("Harga Satuan Barang (Rp) : ",temp.hargaSatuan) 
+                print("Jumlah Stok              : ", temp.jumlahStok) 
+                print("==================================")
+                while True:
+                    jumlah = inputInt("Masukkan jumlah beli : ")
+                    if jumlah <= temp.jumlahStok:
+                            temp.jumlahStok -= jumlah
                             dataTransaksi.append({
                                 "nama Konsumen": nama,
                                 "nama barang" : temp.namaBarang,
-                                "SKU": SKU,
+                                "SKU": sku,
                                 "jumlah": jumlah,
                                 "subtotal": jumlah * temp.hargaSatuan
                             })
-                            temp.jumlahStok -= jumlah
-                            print("Transaksi Berhasil")
-                            inputUlang = False
-                            loop_selesai = True
-                        else:
-                            print("Stok Tidak Mencukupi")
-                            ask = input("Apakah Anda Ingin Melanjutkan Transaksi? (y/n) : ")
-                            if ask.lower() == "y":
-                                inputUlang = True
+                            print("Data Transaksi Berhasil Diinputkan!")
+                            lagi = input("Apakah ingin menambahkan data pembelian untuk konsumen ini (y/n)")
+                            if lagi.lower() == "y":
+                                break
                             else:
-                                inputUlang = False
-                                loop_selesai = True
-
-            if not barang_ditemukan:
-                print("No.SKU Belum Terdaftar!")
-                ask = input("Apakah Anda Ingin Melanjutkan Transaksi? (y/n) : ")
-                if ask.lower() == "n":
-                    loop_selesai = True
+                                ulang = False
+                                break
+                    print("Stok Barang Tidak Mencukupi!")
+                    tanya = input("apakah ingin melanjutkan transaksi ? (y/n)")
+                    if tanya.lower() == "y":
+                        continue
+                    else:
+                        ulang = False
+                        break
+            else:
+                print("SKU belum terdaftar")
+                tanya = input("apakah ingin melanjutkan transaksi ? (y/n)")
+                if tanya.lower() == "y":
+                    continue
+                else:
+                    break
+                    
     def inputInsert(self):
         namaBarang = input("Masukkan Nama Barang : ")
-        hargaSatuan = pyip.inputInt("Masukkan Harga Satuan : ")
-        jumlahStok = pyip.inputInt("Masukkan Jumlah Stok Barang : ")
+        hargaSatuan = inputInt("Masukkan Harga Satuan : ")
+        jumlahStok = inputInt("Masukkan Jumlah Stok Barang : ")
         return namaBarang, hargaSatuan, jumlahStok
     
     def insert(self):
-        SKU = pyip.inputNum("Masukkan No.SKU (Int Only) : ", min=1000, max=9999)
+        SKU = inputSku("Masukkan No.SKU : ")
         if self.root is None:
             namaBarang, hargaSatuan, jumlahStok = self.inputInsert()
             self.root = barang(SKU, namaBarang, hargaSatuan, jumlahStok)
