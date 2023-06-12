@@ -3,8 +3,8 @@
 
 import os
 from prettytable import PrettyTable
+import matplotlib.pyplot as plt
 table = PrettyTable()
-
 
 
 dataTransaksi = []
@@ -47,24 +47,17 @@ class BinarySearchTree:
 
     def restok(self):
         SKU = inputSku("Masukkan No.SKU : ")
-        temp = self.root
-        while (temp is not None):
-            if SKU < temp.SKU:
-                temp = temp.left
-            elif SKU > temp.SKU:
-                temp = temp.right
-            else:
+        temp = self.contains(SKU)
+        if temp is not None:
                 stokBaru = inputInt("Masukkan Stok Baru : ")
                 temp.jumlahStok += stokBaru
                 print("Stok Berhasil Ditambahkan!")
-                break
         else:
             print("No.SKU Belum Terdaftar, \nSilahkan Melakukan Input Data Stok Barang Terlebih Dahulu!")
             ask = input("Ingin Melakukan Transaksi Lagi (y/n) : ")
             if ask.lower() == "y":
                 self.restok()
-            else:
-                return False
+
             
 
     def contains(self,value):
@@ -75,49 +68,43 @@ class BinarySearchTree:
             elif value > temp.SKU:
                 temp = temp.right
             else:
-                return True
-        return False
-            
+                return temp
+        return None
+    
+
     def hapusStok(self):
         SKU = inputSku("Masukkan No.SKU : ")
-        temp = self.root
-        while (temp is not None):
-            if SKU < temp.SKU:
-                temp = temp.left
-            elif SKU > temp.SKU:
-                temp = temp.right
-            else:
+        temp = self.contains(SKU)
+        if temp is not None:
                 stokBaru = inputInt("Masukkan Jumlah Stok Yang Akan Dikurangi : ")
                 if stokBaru > temp.jumlahStok:
-                    print("Jumlah Stok Yang Diinputkan Tidak Valid")
-                    break
+                    print("Input Anda melebihi Jumlah Stok Saat ini!")
                 else:
                     temp.jumlahStok -= stokBaru
                     print("Stok Berhasil Dikurangkan!")
-                    break
+                    ask = input("Ingin Melakukan Transaksi Lagi (y/n) : ")
+                    if ask.lower() == "y":
+                        self.hapusStok()
         else:
-            print("No.SKU Belum Terdaftar, \nSilahkan Melakukan Input Data Stok Barang Terlebih Dahulu!")
+            print("No.SKU Belum Terdaftar!")
             ask = input("Ingin Melakukan Transaksi Lagi (y/n) : ")
             if ask.lower() == "y":
-                self.restok()
-            else:
-                return False
-
+                self.hapusStok()
 
     def kelolaTransaksi(self):
         nama = input("Masukkan Nama :")
         ulang = True
         while ulang == True:
             sku = inputSku("Masukkan No SKU : ")
-            temp = self.root
-            if self.contains(sku):
+            temp = self.contains(sku)
+            if temp is not None:
                 print("========== Detil Barang ==========")
                 print("Nama Barang              : ", temp.namaBarang)
                 print("Harga Satuan Barang (Rp) : ",temp.hargaSatuan) 
                 print("Jumlah Stok              : ", temp.jumlahStok) 
                 print("==================================")
                 while True:
-                    jumlah = inputInt("Masukkan jumlah beli : ")
+                    jumlah = inputInt("Masukkan jumlah beli     :  ")
                     if jumlah <= temp.jumlahStok:
                             temp.jumlahStok -= jumlah
                             dataTransaksi.append({
@@ -127,6 +114,8 @@ class BinarySearchTree:
                                 "jumlah": jumlah,
                                 "subtotal": jumlah * temp.hargaSatuan
                             })
+                            print("Subtotal (Rp)            : ", jumlah * temp.hargaSatuan) 
+                            print("==================================")
                             print("Data Transaksi Berhasil Diinputkan!")
                             lagi = input("Apakah ingin menambahkan data pembelian untuk konsumen ini (y/n)")
                             if lagi.lower() == "y":
@@ -148,7 +137,7 @@ class BinarySearchTree:
                     continue
                 else:
                     break
-                    
+
     def inputInsert(self):
         namaBarang = input("Masukkan Nama Barang : ")
         hargaSatuan = inputInt("Masukkan Harga Satuan : ")
@@ -163,7 +152,7 @@ class BinarySearchTree:
             print("Input Data Stok Barang Berhasil")
             return True
         temp = self.root
-        while (True):
+        while True:
             if SKU == temp.SKU:
                 print("No SKU sudah Terdaftar! Permintaan Input Data Ditolak")
                 return False
@@ -181,6 +170,21 @@ class BinarySearchTree:
                     print("Input Data Stok Barang Berhasil")
                     return True
                 temp = temp.right
+
+    def cariBarangBySKU(self):
+        SKU = inputSku("Masukkan No.SKU yang ingin dicari: ")
+        temp = self.contains(SKU)
+        if temp is not None:
+            table = PrettyTable()
+            table.field_names = ["No.SKU", "Nama Barang", "Harga Satuan (Rp)", "Sisa Stok"]
+            self.printTabelCariBarang(temp, table)
+            print(table)
+        else:
+            print("Barang dengan No.SKU tersebut tidak ditemukan.")
+
+    def printTabelCariBarang(self, barang, table):
+        if barang is not None:
+            table.add_row([barang.SKU, barang.namaBarang, barang.hargaSatuan, barang.jumlahStok])
 
     def printDataBarang(self):
         table = PrettyTable()
@@ -220,6 +224,30 @@ class BinarySearchTree:
         print(table)
 
 
+
+    def printGrafikPenjualan(self):
+        penjualan = {}
+        for transaksi in dataTransaksi:
+            namaBarang = transaksi["nama barang"]
+            jumlah = transaksi["jumlah"]
+            if namaBarang in penjualan:
+                penjualan[namaBarang] += jumlah
+            else:
+                penjualan[namaBarang] = jumlah
+
+        plt.bar(penjualan.keys(), penjualan.values())
+        plt.xlabel("Nama Barang")
+        plt.ylabel("Jumlah Total Penjualan")
+        plt.title("Grafik Penjualan Barang")
+        plt.xticks(rotation=45)
+
+        for i, v in enumerate(penjualan.values()):
+            plt.text(i, v, str(v), ha='center', va='bottom')
+
+        plt.show()
+
+
+
     def insertDummy(self, SKU, namaBarang, hargaSatuan, jumlahStok):
             new_barang = barang(SKU, namaBarang, hargaSatuan, jumlahStok)
             if self.root is None:
@@ -240,8 +268,8 @@ class BinarySearchTree:
                         return True
                     temp = temp.right
 myTree = BinarySearchTree()
-myTree.insertDummy(3333, "udud", 20000, 33)
-myTree.insertDummy(4444, "rokok", 20000, 33)
+myTree.insertDummy(3333, "Beras", 60000, 33)
+myTree.insertDummy(4444, "Rokok", 20000, 45)
 myTree.insertDummy(5555, "baju", 20000, 33)
 myTree.insertDummy(6666, "celana", 20000, 33)
 def menu():
@@ -261,7 +289,8 @@ def menu():
                 print("b) Restok barang")
                 print("c) Hapus stok barang (Barang Expired)")
                 print("d) Lihat Data Barang")
-                print("e) Kembali Ke Menu Utama")
+                print("e) Cari Barang Dengan SKU")
+                print("f) Kembali Ke Menu Utama")
                 pilihh = input("Masukkan Menu (a/b/c/d) >> ")
                 if pilihh.lower() == "a":
                     myTree.insert()
@@ -274,6 +303,8 @@ def menu():
                 elif pilihh.lower() == "d":
                     myTree.printDataBarang()
                 elif pilihh.lower() == "e":
+                    myTree.cariBarangBySKU()
+                elif pilihh.lower() == "f":
                     menu()
                 else:
                     print("menu salah")
@@ -287,7 +318,8 @@ def menu():
                 print("a) Input Data Transaksi Baru")
                 print("b) Lihat Data Seluruh Transaksi Konsumen")
                 print("c) Lihat Data Transaksi Berdasarkan Subtotal")
-                print("d) Kembali Ke Menu Utama")
+                print("d) Lihat Grafik Penjualan")
+                print("e) Kembali Ke Menu Utama")
                 pilih2 = input("Masukkan Menu (a/b/c/d) >> ")
                 if pilih2.lower() == "a":
                     myTree.kelolaTransaksi()
@@ -296,6 +328,8 @@ def menu():
                 elif pilih2.lower() == "c":
                     myTree.printDataTransaksiSorted()
                 elif pilih2.lower() == "d":
+                    myTree.printGrafikPenjualan()
+                elif pilih2.lower() == "e":
                     menu()
                 else:
                     print("menu salah")
