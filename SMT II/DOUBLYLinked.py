@@ -122,10 +122,6 @@ class DoublyLinkedList:
         new_node.next = temp
         temp.prev = new_node
 
-    # def appendByIndex(self, value, index):
-    #     new_node = Node(value)
-    #     if index == 0:
-    #         return self.prepend(value)
         
 
     def remove_at_index(self, index):

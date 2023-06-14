@@ -66,7 +66,6 @@ def seleksi_ayam():
 
 
 
-
 # output
 print("\nList Semua Umur Ayam : ")
 print(data)

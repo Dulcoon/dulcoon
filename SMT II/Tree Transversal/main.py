@@ -54,12 +54,63 @@ class BinarySearchTree:
             transverse(self.root)
             return results
         
+    
+    def contains(self,value):
+        temp = self.root
+        while temp is not None:
+            if value < temp.SKU:
+                temp = temp.left
+            elif value > temp.SKU:
+                temp = temp.right
+            else:
+                return True
+        return False
+    
+    def find_node_path(self, value):
+        if self.root is None:
+            return False
+
+        def traverse(current_node, path):
+            if current_node is None:
+                return False
+
+            if current_node.value == value:
+                return True, path
+
+            left_path = path + "-left"
+            right_path = path + "-right"
+
+            left_result = traverse(current_node.left, left_path)
+            if left_result:
+                return left_result
+
+            right_result = traverse(current_node.right, right_path)
+            if right_result:
+                return right_result
+
+            return False
+
+        result = traverse(self.root, "Root")
+        if result:
+            return result[1]
+        else:
+            return "Node tidak ada"
+    
+        
 myTree = BinarySearchTree()
-myTree.insert(47)
+myTree.insert(49)
+myTree.insert(28)
+myTree.insert(5)
+myTree.insert(44)
+myTree.insert(50)
+myTree.insert(58)
 myTree.insert(21)
-myTree.insert(76)
-myTree.insert(18)
-myTree.insert(27)
-myTree.insert(52)
-myTree.insert(82)
-print(myTree.BFS())
+myTree.insert(66)
+myTree.insert(90)
+myTree.insert(87)
+myTree.insert(42)
+myTree.insert(62)
+myTree.insert(7)
+myTree.insert(24)
+myTree.insert(65)
+print(myTree.BFS(7))

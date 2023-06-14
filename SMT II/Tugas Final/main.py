@@ -17,7 +17,7 @@ def inputSku(prompt):
             print("Input harus berupa int!")
             ipt = None
             continue
-        if ipt >= 9999 or ipt <= 1000:
+        if ipt > 9999 or ipt < 1000:
             print("No SKU harus terdiri dari 4 digit angka!")
             continue
         return ipt
@@ -126,7 +126,7 @@ class BinarySearchTree:
                     print("Stok Barang Tidak Mencukupi!")
                     tanya = input("apakah ingin melanjutkan transaksi ? (y/n)")
                     if tanya.lower() == "y":
-                        continue
+                        break
                     else:
                         ulang = False
                         break
@@ -275,7 +275,7 @@ myTree.insertDummy(6666, "celana", 20000, 33)
 def menu():
     os.system("cls")
     while True:
-        print("===========SISTEM INFORMASI STOK DAN TRANSAKSI=============")
+        print("\n===========SISTEM INFORMASI STOK DAN TRANSAKSI=============")
         print("1) Kelola Stok Barang")
         print("2) Kelola Transaksi Konsumen")
         print("3) Exit")
@@ -284,14 +284,14 @@ def menu():
         if pilih == "1":
             while True:
                 os.system("cls")
-                print("MENU KELOLA STOK BARANG")
+                print("\nMENU KELOLA STOK BARANG")
                 print("a) Input data stok barang")
                 print("b) Restok barang")
-                print("c) Hapus stok barang (Barang Expired)")
+                print("c) Hapus stok barang")
                 print("d) Lihat Data Barang")
                 print("e) Cari Barang Dengan SKU")
                 print("f) Kembali Ke Menu Utama")
-                pilihh = input("Masukkan Menu (a/b/c/d) >> ")
+                pilihh = input("Masukkan Menu (a/b/c/d/e/f) >> ")
                 if pilihh.lower() == "a":
                     myTree.insert()
                 elif pilihh.lower() == "b":
@@ -314,13 +314,13 @@ def menu():
         elif pilih == "2":
             while True:
                 os.system("cls")
-                print("MENU KELOLA TRANSAKSI KONSUMEN")
+                print("\nMENU KELOLA TRANSAKSI KONSUMEN")
                 print("a) Input Data Transaksi Baru")
                 print("b) Lihat Data Seluruh Transaksi Konsumen")
                 print("c) Lihat Data Transaksi Berdasarkan Subtotal")
                 print("d) Lihat Grafik Penjualan")
                 print("e) Kembali Ke Menu Utama")
-                pilih2 = input("Masukkan Menu (a/b/c/d) >> ")
+                pilih2 = input("Masukkan Menu (a/b/c/d/e) >> ")
                 if pilih2.lower() == "a":
                     myTree.kelolaTransaksi()
                 elif pilih2.lower() == "b":
@@ -337,6 +337,6 @@ def menu():
                 input("Press [ENTER] To Continue...")
         else:
             print("Terimakasih Telah Menggunakan Program Saya!")
-            exit()
+            break
 if __name__=="__main__":
     menu()
