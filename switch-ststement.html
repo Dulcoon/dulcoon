@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Switch Statement</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous" />
+    <style>
+      body {
+        padding: 50px 20px 20px 20px;
+      }
+
+      .container {
+        padding-top: 6%;
+      }
+
+      .card {
+        max-width: 100%;
+      }
+
+      .text-center{
+        margin-bottom: 40px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- container -->
+    <div class="container">
+      <div class="text-center">
+        <h1>Pengecekkan Nilai Siswa</h5>
+      </div>
+      <!-- card -->
+      <div class="card">
+        <h5 class="card-header">Check Nilai</h5>
+        <div class="card-body">
+          <!-- form nama -->
+          <div class="mb-3">
+            <label for="NamaSiswa" class="form-label">Nama</label>
+            <input type="email" class="form-control" id="NamaSiswa" placeholder="Masukkan Nama Anda" />
+          </div>
+          <!-- form Nilai -->
+          <div class="mb-3">
+            <label for="NilaiSiswa" class="form-label">Nilai</label>
+            <input type="email" class="form-control" id="NilaiSiswa" placeholder="Masukkan Nilai Anda" />
+          </div>
+          <!-- hasil -->
+          <p class="card-text" id="hasil"></p>
+          <!-- button hasil -->
+          <a href="#" class="btn btn-primary" onclick="pengecekan()">Submit</a>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function pengecekan() {
+        var nama = document.getElementById('NamaSiswa').value;
+        var nilai = parseInt(document.getElementById('NilaiSiswa').value);
+        var grade;
+
+        switch (true) {
+          case nilai > 80:
+            grade = 'A';
+            break;
+          case nilai > 60:
+            grade = 'B';
+            break;
+          case nilai > 40:
+            grade = 'C';
+            break;
+          case nilai > 20:
+            grade = 'D';
+            console.log('D');
+            break;
+          case nilai > 0:
+            grade = 'E';
+            break;
+
+          default:
+            document.getElementById('hasil').innerHTML = `Nilai Tidak Valid`;
+        }
+
+        // validasi grade
+        if (grade == 'A') {
+          document.getElementById('hasil').innerHTML = `Nilai Anda ${grade}. <br>Selamat ${nama}, <br>Anda dinyatakan <span style="text-decoration: underline;">LULUS</span>`;
+        } else if (grade == 'B') {
+          document.getElementById('hasil').innerHTML = `Nilai Anda ${grade}. <br>Selamat ${nama}, <br>Anda dinyatakan <span style="text-decoration: underline;">LULUS</span>`;
+        } else if (grade == 'C') {
+          document.getElementById('hasil').innerHTML = `Nilai Anda ${grade}. <br>Selamat ${nama}, <br>Anda dinyatakan <span style="text-decoration: underline;">LULUS.</span> Belajar Lebih Giat Lagi`;
+        } else if (grade == 'D') {
+          document.getElementById('hasil').innerHTML = `Nilai Anda ${grade}. <br>Sayang Sekali ${nama}, <br>Anda dinyatakan <span style="text-decoration: underline;">TIDAK LULUS.</span> Anda Harus Belajar Lebih Giat Lagi`;
+        } else if (grade == 'E') {
+          document.getElementById('hasil').innerHTML = `Nilai Anda ${grade}. <br>Sayang Sekali ${nama}, <br>Anda dinyatakan <span style="text-decoration: underline;">TIDAK LULUS.</span> Mungkin Anda Salah Jurusan :(`;
+        }
+      }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous"></script>
+  </body>
+</html>
